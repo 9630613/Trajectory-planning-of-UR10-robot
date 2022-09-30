@@ -22,7 +22,7 @@ $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 - [Geometric jacobian](#Geometric-jacobian)                                                                                                                         
 - [Analytic jacobian](#Analytic-jacobian)                                                                                                                           
 - [Trajectory planning](#Trajectory-planning)                                                                                                                         
-- [Invers kinematic](#Invers-kinematic)                                                                                                                            
+- [Invers kinematics](#Invers-kinematics)                                                                                                                            
 - [Controlling robot (IK Algorithm)](#Controlling-robot-(IK-Algorithm))                                                                                                
 - [VREP](#VREP)                                                                                                                                            
 - Conclusion
@@ -300,6 +300,8 @@ $X_{des} = x_i +S(x_f - x_i)$
 
 $d_{X_des}=S(x_f - x_i)$
 
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/the%20desired%20velocities.jpg" width= "500">
+
 # Invers kinematics 
 we want to control the robot with joint configuration so we need q matrix that is the  joint configuration in every moment  
 $$𝑞′ = 𝐽_{𝐴−1}(𝑞) $$
@@ -307,4 +309,39 @@ With integration from dq we can find q (joint configuration) but there is a prob
 $$𝐽^* = 𝐽^T(𝐽 𝐽^T + {𝛾^2}I)^{-1}$$
 Now with using a suitable γ ,we can control robot in the singularities.
 	            	
+# Controlling robot (IK Algorithm)
+In order to control the robot on the desired path ,we should make an error and get a feedback in every moment thus the error is calculated between task desired and the actual end_effector  position and orientation  
+The error is                   
 
+$$ 𝑒 = 𝑥_{𝑑𝑒𝑠𝑖𝑟𝑒𝑑} − 𝑥_{endeffector} $$
+
+End effector pos is a 6 by1 matrix of the  6th joint position  with euler angles in every moment  Finally  
+
+
+$$ 𝑑_𝑞 = 𝐽^T(𝐽 𝐽^T + 𝛾^2{I})^{−1}(𝑑𝑥_{𝑑𝑒𝑠𝑖𝑟𝑒𝑑} − 𝑘 𝐼(𝑥_{𝑑𝑒𝑠𝑖𝑟𝑒𝑑} − 𝑥_{endeffector})) $$
+
+
+k in this robot 2000
+now the robot  is controlled desirability also we can get the error feedback and  decreaes the error very well. 
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/desired%20trajectory.jpg" width= "500">
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/4the%20joint%20configuration.jpg" width= "500">
+
+by comparing initial and final joint configurations and desired trajectory a very small difference is absorbed because the error is negligibile. 
+# VREP 
+For connectioning to Vrep we should copy 3 files from VREP file (in installation place) in a new folder and also a VREP and Mtlab window.  
+In Matlab we copy some codes and write our codes; the codes are for introduction  the joints to Vrep and also a loop for geting the angular configuration  to the robot in the time ;because we control the robot by configuration of its joints .  
+In Vrep window the robot should be chosen and cleared its one code and also inter a code (simRemoteApi.start(19999)) for connectioning to Matlb .  
+After that check the joints to be on inverse kinematic mood and turn off the robot motors.    
+The important thing in VREP is calibration the joints configuration.  
+ the dinavit diagram inVREP is different so we should calibrate the joint to flow the correct path.  
+Now we can connect to Vrep and transfer the data from Matlab to Vrep.  
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/robot%20in%20the%20vrep%20on%20the%20path.jpg" width= "500">
+
+# Conclusion
+Controlling robot in this given path needs a strong controller because the singularities and also 
+the robot during the path had limit velocity around 0.1 m/sec .
