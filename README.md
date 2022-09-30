@@ -6,8 +6,8 @@ qi =[ pi/2       0          pi/2       0        pi/2   pi/6]
 
 qf  =[ pi/4   -pi/4      pi/1.5      0       pi/2     0   ] 
 # Table of content
-- Dinavit Hartenberg                                                                                                                          
-- Geometric jacobian                                                                                                                         
+- [Dinavit Hartenberg](#Dinavit-Hartenberg)                                                                                                                          
+- [Geometric jacobian](#Geometric-jacobian)                                                                                                                         
 - Analytic jacobian                                                                                                                           
 - Trajectory planning                                                                                                                         
 - Invers kinematic                                                                                                                             
