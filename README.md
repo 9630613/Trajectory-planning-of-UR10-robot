@@ -21,10 +21,10 @@ $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 - [Dinavit Hartenberg](#Dinavit-Hartenberg)                                                                                                                          
 - [Geometric jacobian](#Geometric-jacobian)                                                                                                                         
 - [Analytic jacobian](#Analytic-jacobian)                                                                                                                           
-- Trajectory planning                                                                                                                         
-- Invers kinematic                                                                                                                             
-- Controlling robot (IK Algorithm)                                                                                                
-- VREP                                                                                                                                            
+- [Trajectory planning](#Trajectory-planning)                                                                                                                         
+- [Invers kinematic](#Invers-kinematic)                                                                                                                            
+- [Controlling robot (IK Algorithm)](#Controlling-robot-(IK-Algorithm))                                                                                                
+- [VREP](#VREP)                                                                                                                                            
 - Conclusion
 # Dinavit Hartenberg
 The first step is to find DH diagram
@@ -272,7 +272,8 @@ $$x_i=\begin{pmatrix} −0.1639\\
 	
 Now, we can make our trajectory:
 
-$ L= ||x_f-x_i||= 0.58m $
+
+$L= ||x_f-x_i||= 0.58m$
 
 $T=7 sec (given)$
 
@@ -283,7 +284,27 @@ $T_s= \frac{(T- L)}{V_{max}}$
 $a_{max}=\frac{V_{max}}{T_s}$
 
 
+$$Ϭ=\begin{array}{ccc} 
+\frac{a_{𝑚𝑎𝑥}𝑡^2}{2}                          & 	  t \to [0,T_s]\\
+v_{𝑚𝑎𝑥}𝑡 − \frac{{v_{𝑚𝑎𝑥}}^2}{2a_{𝑚𝑎𝑥}}                            &    t \to  [T_s,T-T_s]\\
+\frac{-𝑎_{𝑚𝑎𝑥}( 𝑡 − 𝑇)^2}{2} + v_{𝑚𝑎𝑥}T+\frac{{v_{𝑚𝑎𝑥}}^2}{a_{𝑚𝑎𝑥}}&        t \to [T-T_s,T]
+\end{array}$$
+ 
+ 
+This timing low will be constant for every desired path (with trapezoidal velocity profile) and 
+the difference is in making path parameterization, a linier path is given thus
 
+$S=\frac{Ϭ}{L}$
 
+$X_{des} = x_i +S(x_f - x_i)$
+
+$d_{X_des}=S(x_f - x_i)$
+
+# Invers kinematics 
+we want to control the robot with joint configuration so we need q matrix that is the  joint configuration in every moment  
+$$𝑞′ = 𝐽_{𝐴−1}(𝑞) $$
+With integration from dq we can find q (joint configuration) but there is a problem when a joint is in singularity  the jacobian loses its rank and we can’t control the robot ,it will  stop or move undesirable, thus Damped last squares method is used 
+$$𝐽^* = 𝐽^T(𝐽 𝐽^T + {𝛾^2}I)^{-1}$$
+Now with using a suitable γ ,we can control robot in the singularities.
 	            	
 
