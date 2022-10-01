@@ -1,6 +1,6 @@
 # Trajectory-planning-of-UR10-robot
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/UR10.png" width= "500"> 
-This project is about the six DOF robot called Universal Robot (UR10). This robot contains 6 revolute joints. The robot is going to follow a straight line with constant rotation matrix (the rotation matrix of 6th joint with respect to the base in the first angular configuration ) from first angular qi to the last one qf
+This project is about the six DOF robot called Universal Robot (UR10).This robot contains 6 revolute joints. The robot is going to follow a straight line with constant rotation matrix (the rotation matrix of 6th joint with respect to the base in initial angular configuration ) from the first angular position (qi) to the last one (qf).
 
 $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 0\\
@@ -8,7 +8,7 @@ $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 0\\
 \frac{Pi}{2}\\
 \frac{Pi}{6}
-\end{pmatrix}              q_i=\begin{pmatrix} \frac{Pi}{4}\\
+\end{pmatrix}              q_f=\begin{pmatrix} \frac{Pi}{4}\\
 \frac{-Pi}{4}\\
 \frac{Pi}{1.5}\\
 0\\
@@ -25,7 +25,7 @@ $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 - [Invers kinematics](#Invers-kinematics)                                                                                                                            
 - [Controlling robot (IK Algorithm)](#Controlling-robot-(IK-Algorithm))                                                                                                
 - [VREP](#VREP)                                                                                                                                            
-- Conclusion
+- [Conclusion](#Conclusion)
 # Dinavit Hartenberg
 The first step is to find DH diagram
 
@@ -43,7 +43,7 @@ The first step is to find DH diagram
 
 
 # Geometric jacobian
-In order to calculate the jacobian matrix, fist of all, the transformation matrix should be made. The following matrix called transformation matrix, included the rotation matrix(   $A_i^{i-1}(q_i) [1:3,1:3]$   ) and the position matrix (   $A_i^{i-1}(q_i) [1:3,4]$   ) that are with respect to their previous joints.
+In order to calculate the jacobian matrix, fist of all, the transformation matrix should be made. The following matrix called transformation matrix including the rotation matrix(   $A_i^{i-1}(q_i) [1:3,1:3]$   ) and the position matrix (   $A_i^{i-1}(q_i) [1:3,4]$   ) that are with respect to their previous joints.
 
 
  $$A_i^{i-1}(q_i) =A_i^{i-1}\begin{pmatrix}\alpha_i\\
@@ -58,7 +58,7 @@ s_{\theta_i} & c_{\theta_i}c_{\alpha_i} & -c_{\theta_i}s_{\alpha_i} & a_is_{\the
 
 
 
-According to the   $A_i^{i-1}(q_i)$   , the transformation matrix could be calculated. For example, for first joint is :
+According to the   $A_i^{i-1}(q_i)$   , the transformation matrix could be calculated. For example, for the first joint is :
 
 
 $$A_{10}=A_1^{0}\begin{pmatrix}\alpha_1\\
@@ -158,7 +158,7 @@ $P_{64} = A_{60}[1:3,4]-A_{40}[1:3,4]$
 $P_{65} = A_{60}[1:3,4]-A_{50}[1:3,4]$
 
 
-One last part is to find the position matrix of each joint with respect to the base, that easily could be calculate:
+Now, we should find the position matrix of each joint with respect to the base, that easily could be calculate:
 
 
 $$Z_0=\begin{bmatrix} 0\\
@@ -186,9 +186,9 @@ $$J=\begin{bmatrix} Z_0 \times P_{60} & Z_1 \times P_{61} & Z_2 \times P_{62} & 
 
 
 # Analytic jacobian
-For invers kinematic is needed to use the analytic jacobian ,which  needs the euler angles  We use the xyz coordinate because of the VREP coordinate. 
-We know that the difference between geometric and analytic jacobian is in the angular velocities and they have the same linier velocities so for calculating analytic jacobian the geometric angular velocities  should be changed. 
-The angular velocities in geometric jacobian are the derivative of euler angles in every moment Then  for the (xyz)coordinate have 
+In order to calculate the inverse kinematic it is necessary to use the analytic jacobian which needs the euler angles. The xyz coordinate is used for euler angles because of the VREP coordinate. 
+In fact, the only difference between geometric jacobian and analytic jacobian is the angular velocities, whereas they have the same linier velocities, so to calculate the analytic jacobian the geometric angular velocities should be changed. 
+The angular velocities in the geometric jacobian are the derivative of euler angles in every moment.Then, for the (xyz)coordinate :
 
 $$ T_{xyz}\begin{pmatrix} \alpha\\
 \theta\\
@@ -202,14 +202,15 @@ $$ T_{xyz}\begin{pmatrix} \alpha\\
 
 $$	w= T(\Phi) \Phi'$$
 
-The α, \theta, γ are the euler angles wich are calculated them by solving the invers problem rotation 
-matrix 6
-th joint with respect to the base in every moment.
-so we should multiply elementary rotation matrix sequence $R_x(α), R_y(\theta), R_z(γ)$ and solve the 
-invers problem in each moment for this the function (rotm2eul(R60,’xyz’) )is used in Matlab
-that gives euler angles in the moment and we can calculate T matrix.
-Finally by multiplying T inverse in the angular velocities of geometric jacobian , get the analytic 
-one.
+The α, $\theta$, γ are the euler angles calculated by solving the inverse problem of the rotation matrix of 6th joint with respect to the base in every moment.
+In order to caculate the rotation matrix, the elementary rotation matrixes should be multiplied in sequence, $R_x(α), R_y(\theta), R_z(γ)$, and the inverse problem should be solved in each moment.Solving the problem, the next function used.
+
+````c++
+rotm2eul(R60,’xyz’)
+````
+As the result, euler angles in the moment are calculate to make T matrix.
+Finally, by multiplying T inverse in the angular velocities of geometric jacobian, the analytic 
+one is produced.
 because we want to have a product of matrix we use the 6 by 6 matrix U.
 
 $$ U=\begin{bmatrix} I&0\\
