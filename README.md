@@ -1,6 +1,6 @@
 # Trajectory-planning-of-UR10-robot
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/UR10.png" width= "500"> 
-This project is about the six DOF robot called Universal Robot (UR10).This robot contains 6 revolute joints. The robot is going to follow a straight line with constant rotation matrix (the rotation matrix of 6th joint with respect to the base in initial angular configuration ) from the first angular position (qi) to the last one (qf).
+This project is about a six DOF robot called Universal Robot (UR10).This robot contains 6 revolute joints. The robot is going to follow a straight line with constant rotation matrix (the rotation matrix of 6th joint with respect to the base in initial angular configuration ) from the first angular position (qi) to the last one (qf).
 
 $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 0\\
@@ -43,7 +43,7 @@ The first step is to find DH diagram
 
 
 # Geometric jacobian
-In order to calculate the jacobian matrix, fist of all, the transformation matrix should be made. The following matrix called transformation matrix including the rotation matrix(   $A_i^{i-1}(q_i) [1:3,1:3]$   ) and the position matrix (   $A_i^{i-1}(q_i) [1:3,4]$   ) that are with respect to their previous joints.
+In order to calculate the jacobian matrix, fist of all, the transformation matrix should be made. The following matrix called transformation matrix includes the rotation matrix(   $A_i^{i-1}(q_i) [1:3,1:3]$   ) and the position matrix (   $A_i^{i-1}(q_i) [1:3,4]$   ) that are with respect to their previous joints.
 
 
  $$A_i^{i-1}(q_i) =A_i^{i-1}\begin{pmatrix}\alpha_i\\
@@ -58,7 +58,7 @@ s_{\theta_i} & c_{\theta_i}c_{\alpha_i} & -c_{\theta_i}s_{\alpha_i} & a_is_{\the
 
 
 
-According to the   $A_i^{i-1}(q_i)$   , the transformation matrix could be calculated. For example, for the first joint is :
+According to   $A_i^{i-1}(q_i)$   , the transformation matrix could be calculated. For example, for the first joint is :
 
 
 $$A_{10}=A_1^{0}\begin{pmatrix}\alpha_1\\
@@ -186,8 +186,8 @@ $$J=\begin{bmatrix} Z_0 \times P_{60} & Z_1 \times P_{61} & Z_2 \times P_{62} & 
 
 
 # Analytic jacobian
-In order to calculate the inverse kinematic it is necessary to use the analytic jacobian which needs the euler angles. The xyz coordinate is used for euler angles because of the VREP coordinate. 
-In fact, the only difference between geometric jacobian and analytic jacobian is the angular velocities, whereas they have the same linier velocities, so to calculate the analytic jacobian the geometric angular velocities should be changed. 
+In order to calculate the inverse kinematic, it is necessary to use the analytic jacobian which needs the euler angles. The xyz coordinate is used for euler angles because of the VREP coordinate. 
+In fact, the only difference between geometric jacobian and analytic jacobian is their angular velocities, whereas they have the same linier velocities, so to calculate the analytic jacobian, the geometric angular velocities should be changed. 
 The angular velocities in the geometric jacobian are the derivative of euler angles at every moment.Then, for the (xyz)coordinate :
 
 $$ T_{xyz}\begin{pmatrix} \alpha\\
@@ -208,9 +208,9 @@ In order to caculate the rotation matrix, the elementary rotation matrixes shoul
 ````c++
 rotm2eul(R60,’xyz’)
 ````
-As the result, the euler angles in the moment are replaced to make T.
+As the result, the euler angles are replaced to make T.
 Finally, by multiplying T inverse in the angular velocities of geometric jacobian, the analytic one is produced.
-Duo to the fact that T should be a $6\times 6$ matrix to be able to be multiplied in U, the extra matrixes $0_{3 \times 3}$ and $I_{3 \times 3}$ (indentity matrix) are added in the nutral positions .
+Duo to the fact that T should be a $6\times 6$ matrix to be able to be multiplied by U, the extra matrixes $0_{3 \times 3}$ and $I_{3 \times 3}$ (indentity matrix) are added in the nutral positions .
 
 $$ U=\begin{bmatrix} I_{3 \times 3} & 0_{3 \times 3}\\
 0_{3 \times 3} & T_{3 \times 3}
@@ -225,7 +225,7 @@ $$ J_A=\begin{bmatrix} I&0\\
 \end{bmatrix}^{-1}*J_G$$
 
 # Trajectory planning 
-To solve the trajectory planning, a linier cartesian path is planned in the 6 dimension task space including position and orientation. Also, a trapezoidal velocity profile is used in timing law to have a constant velocity along the path . 
+To solve the trajectory planning, a linear cartesian path is planned in the 6 dimension task space including position and orientation. Also, a trapezoidal velocity profile is used in timing law to have a constant velocity along the path . 
 Now, the initial and final position and orientation should be found.  
 The position is calculated by replacing the qi and qf in the end-effector position with respect to the base. The end-effector position is the 4th column in 6th joint of the transformation matrix with respect to the base. thus 
 ````c++
@@ -286,7 +286,7 @@ v_{𝑚𝑎𝑥}𝑡 − \frac{{v_{𝑚𝑎𝑥}}^2}{2a_{𝑚𝑎𝑥}}         
 \end{array}$$
  
  
-This timing low will be constant for every desired path (with trapezoidal velocity profile), and the difference is in making the path parameterization. Because a linier path is given. Thus:
+This timing low will be constant for every desired path with trapezoidal velocity profile, and the difference is in making the path parameterization. The path is linear,so:
 
 $S=\frac{Ϭ}{L}$
 
@@ -297,26 +297,26 @@ $d_{X_des}=S(x_f - x_i)$
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/the%20desired%20velocities.jpg" width= "500">
 
 # Invers kinematics 
-Controling the robot is with joint configuration, so q matrix is the joint configuration at every moment.  
+Controling the robot is with joint configuration, so q matrix That is the joint configuration at every moment is given.  
 $$𝑞′ = 𝐽_{𝐴−1}(𝑞) $$
-With integration from dq we can find q (joint configuration) but there is a problem when a joint is in singularity  the jacobian loses its rank and we can’t control the robot ,it will  stop or move undesirable, thus Damped last squares method is used 
+With integrating from drivative of q, the joint configuration (q) is produced, but there is a problem when a joint is in singularity. As the result, the jacobian loses its rank and we can’t control the robot. That will stops the robot from working or moves it undesirably. thus, the Damped last squares method is used.
 $$𝐽^* = 𝐽^T(𝐽 𝐽^T + {𝛾^2}I)^{-1}$$
-Now with using a suitable γ ,we can control robot in the singularities.
+Now with using a suitable γ , we can control robot in the singularities.
 	            	
 # Controlling robot (IK Algorithm)
-In order to control the robot on the desired path ,we should make an error and get a feedback in every moment thus the error is calculated between task desired and the actual end_effector  position and orientation  
-The error is                   
+In order to control the robot on the desired path, an error is calculated between desired task and the actual end_effector position and orientation. 
+The error is :                 
 
 $$ 𝑒 = 𝑥_{𝑑𝑒𝑠𝑖𝑟𝑒𝑑} − 𝑥_{endeffector} $$
 
-End effector pos is a 6 by1 matrix of the  6th joint position  with euler angles in every moment  Finally  
+The end-effector position is a 6 by 1 matrix including the position of the 6th joint and euler angles at every moment. Finally:  
 
 
 $$ 𝑑_𝑞 = 𝐽^T(𝐽 𝐽^T + 𝛾^2{I})^{−1}(𝑑𝑥_{𝑑𝑒𝑠𝑖𝑟𝑒𝑑} − 𝑘 𝐼(𝑥_{𝑑𝑒𝑠𝑖𝑟𝑒𝑑} − 𝑥_{endeffector})) $$
 
 
-k in this robot 2000
-now the robot  is controlled desirability also we can get the error feedback and  decreaes the error very well. 
+k in this robot 2000.
+now the robot is controlled desirability also we can get the error feedback and  decreaes the error very well. 
 
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
 
