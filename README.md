@@ -188,7 +188,7 @@ $$J=\begin{bmatrix} Z_0 \times P_{60} & Z_1 \times P_{61} & Z_2 \times P_{62} & 
 # Analytic jacobian
 In order to calculate the inverse kinematic it is necessary to use the analytic jacobian which needs the euler angles. The xyz coordinate is used for euler angles because of the VREP coordinate. 
 In fact, the only difference between geometric jacobian and analytic jacobian is the angular velocities, whereas they have the same linier velocities, so to calculate the analytic jacobian the geometric angular velocities should be changed. 
-The angular velocities in the geometric jacobian are the derivative of euler angles in every moment.Then, for the (xyz)coordinate :
+The angular velocities in the geometric jacobian are the derivative of euler angles at every moment.Then, for the (xyz)coordinate :
 
 $$ T_{xyz}\begin{pmatrix} \alpha\\
 \theta\\
@@ -202,26 +202,22 @@ $$ T_{xyz}\begin{pmatrix} \alpha\\
 
 $$	w= T(\Phi) \Phi'$$
 
-The α, $\theta$, γ are the euler angles calculated by solving the inverse problem of the rotation matrix of 6th joint with respect to the base in every moment.
-In order to caculate the rotation matrix, the elementary rotation matrixes should be multiplied in sequence, $R_x(α), R_y(\theta), R_z(γ)$, and the inverse problem should be solved in each moment.Solving the problem, the next function used.
+The α, $\theta$, and γ are the euler angles calculated by solving the inverse problem of the rotation matrix of 6th joint with respect to the base at every moment.
+In order to caculate the rotation matrix, the elementary rotation matrixes should be multiplied in sequence, $R_x(α), R_y(\theta), R_z(γ)$, and the inverse problem should be solved at the moment. To Solve the problem, the next function is used.
 
 ````c++
 rotm2eul(R60,’xyz’)
 ````
-As the result, euler angles in the moment are calculate to make T matrix.
-Finally, by multiplying T inverse in the angular velocities of geometric jacobian, the analytic 
-one is produced.
-because we want to have a product of matrix we use the 6 by 6 matrix U.
+As the result, the euler angles in the moment are replaced to make T.
+Finally, by multiplying T inverse in the angular velocities of geometric jacobian, the analytic one is produced.
+Duo to the fact that T should be a $6\times 6$ matrix to be able to be multiplied in U, the extra matrixes $0_{3 \times 3}$ and $I_{3 \times 3}$ (indentity matrix) are added in the nutral positions .
 
-$$ U=\begin{bmatrix} I&0\\
-0&T
+$$ U=\begin{bmatrix} I_{3 \times 3} & 0_{3 \times 3}\\
+0_{3 \times 3} & T_{3 \times 3}
 \end{bmatrix}$$
 
 
 $$ J_G=U J_A$$
-
-
-As you see the I matrix is a 3by3 indentity matrix and 0 matrix is a 3by 3 zero  matrix. thus  
 
 
 $$ J_A=\begin{bmatrix} I&0\\
@@ -229,14 +225,14 @@ $$ J_A=\begin{bmatrix} I&0\\
 \end{bmatrix}^{-1}*J_G$$
 
 # Trajectory planning 
-For trajectory planning we are planning a linier cartesian path in the 6 dimension task space wich is contains position and orientation ; also we use a trapezoidal velocity profile in timing law to have a constant velocity along the path . 
-We find the initial and final position and orientation.  
-The position is calculated by replacing the qi and qf in the end-effector position with respect to the base that is the 4th column in 6th joint transformation matrix with respect to the base thus 
+To solve the trajectory planning, a linier cartesian path is planned in the 6 dimension task space including position and orientation. Also, a trapezoidal velocity profile is used in timing law to have a constant velocity along the path . 
+Now, the initial and final position and orientation should be found.  
+The position is calculated by replacing the qi and qf in the end-effector position with respect to the base. The end-effector position is the 4th column in 6th joint of the transformation matrix with respect to the base. thus 
 ````c++
 xi= subs(p60,{q1,q2,q3,q4,q5,q6},{pi/2,0,pi/2,0,pi/2,pi/6}) 
 xf= subs(p60,{q1,q2,q3,q4,q5,q6},{pi/4,-pi/4,pi/1.5,0,pi/2,0})
 ````
-thus 
+
 
 $$x_i=\begin{pmatrix} −0.1639\\
  −0.4963\\
@@ -247,14 +243,12 @@ $$x_i=\begin{pmatrix} −0.1639\\
 \end{pmatrix}$$
 
 
-orientation is needed wich is calculated by replacing qi in the the 6th joint rotation matrix with 
-respect to the base and found the euler angles, it is notice that the final orientation is the same 
-because the constant orientation along the path is desired.
+The needed orientation is calculated by replacing qi in the rotation matrix of the 6th joint with respect to the base, and finding the euler angles. It is noticable that the final orientation is the same, according to the given data of the issue (constant orientation along the path).
 ````c++
 Rotation matrix=subs(A60(1:3,1:3),{q1,q2,q3,q4,q5,q6},{pi/2,0,pi/2,0,pi/2,pi/6})
 Euler angles= rotm2eul (Rotation matrix,’xyz’)
 ````
-Finally we have the initial and final pose:
+Finally, the initial and final position:
 
 
 $$x_i=\begin{pmatrix} −0.1639\\
@@ -271,7 +265,7 @@ $$x_i=\begin{pmatrix} −0.1639\\
 −2.6118
 \end{pmatrix}$$
 	
-Now, we can make our trajectory:
+Now, making the trajectory:
 
 
 $L= ||x_f-x_i||= 0.58m$
@@ -292,8 +286,7 @@ v_{𝑚𝑎𝑥}𝑡 − \frac{{v_{𝑚𝑎𝑥}}^2}{2a_{𝑚𝑎𝑥}}         
 \end{array}$$
  
  
-This timing low will be constant for every desired path (with trapezoidal velocity profile) and 
-the difference is in making path parameterization, a linier path is given thus
+This timing low will be constant for every desired path (with trapezoidal velocity profile), and the difference is in making the path parameterization. Because a linier path is given. Thus:
 
 $S=\frac{Ϭ}{L}$
 
@@ -304,7 +297,7 @@ $d_{X_des}=S(x_f - x_i)$
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/the%20desired%20velocities.jpg" width= "500">
 
 # Invers kinematics 
-we want to control the robot with joint configuration so we need q matrix that is the  joint configuration in every moment  
+Controling the robot is with joint configuration, so q matrix is the joint configuration at every moment.  
 $$𝑞′ = 𝐽_{𝐴−1}(𝑞) $$
 With integration from dq we can find q (joint configuration) but there is a problem when a joint is in singularity  the jacobian loses its rank and we can’t control the robot ,it will  stop or move undesirable, thus Damped last squares method is used 
 $$𝐽^* = 𝐽^T(𝐽 𝐽^T + {𝛾^2}I)^{-1}$$
