@@ -22,7 +22,7 @@ $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 - [Geometric jacobian](#Geometric-jacobian)                                                                                                                         
 - [Analytic jacobian](#Analytic-jacobian)                                                                                                                           
 - [Trajectory planning](#Trajectory-planning)                                                                                                                         
-- [Invers kinematics](#Invers-kinematics)                                                                                                                            
+- [Inverse kinematics](#Inverse-kinematics)                                                                                                                            
 - [Controlling robot (IK Algorithm)](#Controlling-robot-(IK-Algorithm))                                                                                                
 - [VREP](#VREP)                                                                                                                                            
 - [Conclusion](#Conclusion)
@@ -257,7 +257,7 @@ $$x_i=\begin{pmatrix} −0.1639\\
 0\\
 0\\
 −2.6118
-\end{pmatrix}              q_i=\begin{pmatrix} −0.4645\\
+\end{pmatrix}              x_f=\begin{pmatrix} −0.4645\\
 −0.2327 \\
 0.3664\\
 0\\
@@ -296,7 +296,7 @@ $d_{X_des}=S(x_f - x_i)$
 
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/the%20desired%20velocities.jpg" width= "500">
 
-# Invers kinematics 
+# Inverse kinematics 
 Controling the robot is with joint configuration, so q matrix That is the joint configuration at every moment is given.  
 $$𝑞′ = 𝐽_{𝐴−1}(𝑞) $$
 With integrating from drivative of q, the joint configuration (q) is produced, but there is a problem when a joint is in singularity. As the result, the jacobian loses its rank and we can’t control the robot. That will stops the robot from working or moves it undesirably. thus, the Damped last squares method is used.
