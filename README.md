@@ -299,7 +299,7 @@ $d_{X_des}=S(x_f - x_i)$
 # Inverse kinematics 
 Controling the robot is with joint configuration, so q matrix That is the joint configuration at every moment is given.  
 $$𝑞′ = 𝐽_{𝐴−1}(𝑞) $$
-With integrating from drivative of q, the joint configuration (q) is produced, but there is a problem when a joint is in singularity. As the result, the jacobian loses its rank and we can’t control the robot. That will stops the robot from working or moves it undesirably. thus, the Damped last squares method is used.
+With integrating from drivative of q, the joint configuration (q) is produced, but there is a problem when a joint is in singularity. As the result, the jacobian loses its rank and we can’t control the robot. That will stops the robot from working or moves it undesirably. thus, the Damped last squares method is introduced.
 $$𝐽^* = 𝐽^T(𝐽 𝐽^T + {𝛾^2}I)^{-1}$$
 Now with using a suitable γ , we can control robot in the singularities.
 	            	
@@ -316,7 +316,9 @@ $$ 𝑑_𝑞 = 𝐽^T(𝐽 𝐽^T + 𝛾^2{I})^{−1}(𝑑𝑥_{𝑑𝑒𝑠𝑖
 
 
 k in this robot 2000.
-now the robot is controlled desirability also we can get the error feedback and  decreaes the error very well. 
+
+
+Now, the robot is controlled desirably. Also, we can get the error feedback and  decreaes the error very well. 
 
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
 
@@ -326,7 +328,7 @@ now the robot is controlled desirability also we can get the error feedback and 
 
 by comparing initial and final joint configurations and desired trajectory a very small difference is absorbed because the error is negligibile. 
 # VREP 
-For connectioning to Vrep we should copy 3 files from VREP file (in installation place) in a new folder and also a VREP and Mtlab window.  
+For connectioning to Vrep, 4 files from VREP file (in installation directory), and a matlab file in a new folder and also a VREP and .  
 In Matlab we copy some codes and write our codes; the codes are for introduction  the joints to Vrep and also a loop for geting the angular configuration  to the robot in the time ;because we control the robot by configuration of its joints .  
 In Vrep window the robot should be chosen and cleared its one code and also inter a code (simRemoteApi.start(19999)) for connectioning to Matlb .  
 After that check the joints to be on inverse kinematic mood and turn off the robot motors.    
