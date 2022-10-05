@@ -334,9 +334,9 @@ In MATLAB, some codes should be copied and writen. These codes introduce the joi
 
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/vrep_2.PNG" width= "700">
 
-In Vrep, the robot should be chosen and replaced its code with ````simRemoteApi.start(19999)```` for connectiong to MATLAB.
+In V-REP, the robot should be chosen and replaced its code with ````simRemoteApi.start(19999)```` for connectiong to MATLAB.
 
-<https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/vrep_3.PNG.jpg" width= "500">
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/vrep_3.PNG" width= "500">
 
 Afterwards, the joints should be on the inverse kinematic mood, and the robot motores should be off.    
 The important thing in V-REP is calibrating the joint configurations. As the Dinavit diagram, in VREP, is different, so we should calibrate the joints to follow the correct path.   
@@ -395,6 +395,6 @@ By comparing initial and final joint configurations and desired trajectory, a ve
 Controlling robot in this given path needs a strong controller due to the singularities. Also, the robot, during the path, had a limit velocity around 0.1 m/sec.
 
 
-What is more, robot crashed into the ground because not only the task space has 6 DOF (the 3D space) but also UR10 is a 6 DOF robot. As the result, the robot just could move on every particular path with the individual position and joints configuration. In other words, the UR10 is not able to follow one path with 2 different positions. to solve this problem we could deploy other 7 DOF robota like FrankaEmikaPanda. In fact, the redundancy in this robot allows robot to move more diverse.
+What is more, robot crashed into the ground because not only the task space has 6 DOF (the 3D space) but also UR10 is a 6 DOF robot. As the result, the robot just could move on every particular path with the individual position and joint configuration. In other words, the UR10 is not able to follow one path with 2 different positions. To solve this problem we could deploy another 7 DOF robot like FrankaEmikaPanda. In fact, the redundancy in this robot allows it to move more diverse.
 
 Overall, the robot is controlled properly on the desired path with the least error.
