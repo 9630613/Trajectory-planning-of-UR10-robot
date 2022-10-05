@@ -24,7 +24,7 @@ $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 - [Trajectory planning](#Trajectory-planning)                                                                                                                         
 - [Inverse kinematics](#Inverse-kinematics)                                                                                                                            
 - [Controlling robot (IK Algorithm)](#Controlling-robot-(IK-Algorithm))                                                                                                
-- [VREP](#VREP)                                                                                                                                            
+- [V-REP](#V-REP)                                                                                                                                            
 - [Conclusion](#Conclusion)
 # Dinavit Hartenberg
 The first step is to find DH diagram
@@ -327,14 +327,29 @@ Now, the robot is controlled desirably. Also, we can get the error feedback and 
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/4the%20joint%20configuration.jpg" width= "500">
 
 by comparing initial and final joint configurations and desired trajectory a very small difference is absorbed because the error is negligibile. 
-# VREP 
-For connectioning to Vrep, 4 files from VREP file (in installation directory), and a matlab file in a new folder and also a VREP and .  
-In Matlab we copy some codes and write our codes; the codes are for introduction  the joints to Vrep and also a loop for geting the angular configuration  to the robot in the time ;because we control the robot by configuration of its joints .  
-In Vrep window the robot should be chosen and cleared its one code and also inter a code (simRemoteApi.start(19999)) for connectioning to Matlb .  
-After that check the joints to be on inverse kinematic mood and turn off the robot motors.    
-The important thing in VREP is calibration the joints configuration.  
- the dinavit diagram inVREP is different so we should calibrate the joint to flow the correct path.  
-Now we can connect to Vrep and transfer the data from Matlab to Vrep.  
+# V-REP 
+V-REP (the Virtual Robot Experimentation Platform) is a 3D robot simulation software, with integrated development environment, that allows you to model, edit, program and simulate any robot or robotic system (e.g. sensors, mechanisms, etc.).
+Although some brief information on setting the robot is provided below, you could find more information on [v-rep (CoppeliaSim) matlab client , and animation of robot joints (legacyRemoteApi)](https://www.youtube.com/watch?v=7Z01cRw_i5E).
+
+
+For connectioning to Vrep, 4 files from VREP installation directory and a MATLAB file should be pased altogetherin a new folder.  
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
+
+In MATLAB, some codes should be copied and writen. These codes introduce the joints to Vrep. Furthermore, there is a loop that sends the angular configuration to the robot joints in VREP simultaneously because the robot is controlled by joint configuration.  
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
+
+In Vrep, the robot should be chosen and replaced its code with ````simRemoteApi.start(19999)```` for connectiong to MATLAB.
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
+
+Afterwards, the joints should be on the inverse kinematic mood, and the robot motores should be off.    
+The important thing in VREP is calibration the joints configuration. As the Dinavit diagram, in VREP, is different, so we should calibrate the joint to follow the correct path.   
+
+
+
+Finally, the robot is ready to move.
 
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/robot%20in%20the%20vrep%20on%20the%20path.jpg" width= "500">
 
