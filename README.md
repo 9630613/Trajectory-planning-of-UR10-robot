@@ -18,13 +18,15 @@ $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 
 
 # Table of content
-- [Dinavit Hartenberg](#Dinavit-Hartenberg)                                                                                                                          
+
+- [Dinavit Hartenberg](#Dinavit-Hartenberg)                                                                                                                         
 - [Geometric jacobian](#Geometric-jacobian)                                                                                                                         
 - [Analytic jacobian](#Analytic-jacobian)                                                                                                                           
-- [Trajectory planning](#Trajectory-planning)                                                                                                                         
-- [Inverse kinematics](#Inverse-kinematics)                                                                                                                            
-- [Controlling robot (IK Algorithm)](#Controlling-robot-(IK-Algorithm))                                                                                                
-- [V-REP](#V-REP)                                                                                                                                            
+- [Trajectory planning](#Trajectory-planning)                                                                                                                       
+- [Inverse kinematics](#Inverse-kinematics)                                                                                                                         
+- [Controlling robot (IK Algorithm)](#Controlling-robot-(IK-Algorithm))                                                                                             
+- [V-REP](#V-REP)       
+- [Results](#Results) 
 - [Conclusion](#Conclusion)
 # Dinavit Hartenberg
 The first step is to find DH diagram
@@ -304,7 +306,7 @@ $$𝐽^* = 𝐽^T(𝐽 𝐽^T + {𝛾^2}I)^{-1}$$
 Now with using a suitable γ , we can control robot in the singularities.
 	            	
 # Controlling robot (IK Algorithm)
-In order to control the robot on the desired path, an error is calculated between desired task and the actual end_effector position and orientation. 
+In order to control the robot on the desired path, an error is calculated between the desired task and the actual end_effector position and orientation. 
 The error is :                 
 
 $$ 𝑒 = 𝑥_{𝑑𝑒𝑠𝑖𝑟𝑒𝑑} − 𝑥_{endeffector} $$
@@ -318,34 +320,26 @@ $$ 𝑑_𝑞 = 𝐽^T(𝐽 𝐽^T + 𝛾^2{I})^{−1}(𝑑𝑥_{𝑑𝑒𝑠𝑖
 k in this robot 2000.
 
 
-Now, the robot is controlled desirably. Also, we can get the error feedback and  decreaes the error very well. 
-
-<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
-
-<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/desired%20trajectory.jpg" width= "500">
-
-<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/4the%20joint%20configuration.jpg" width= "500">
-
-by comparing initial and final joint configurations and desired trajectory a very small difference is absorbed because the error is negligibile. 
 # V-REP 
+
 V-REP (the Virtual Robot Experimentation Platform) is a 3D robot simulation software, with integrated development environment, that allows you to model, edit, program and simulate any robot or robotic system (e.g. sensors, mechanisms, etc.).
 Although some brief information on setting the robot is provided below, you could find more information on [v-rep (CoppeliaSim) matlab client , and animation of robot joints (legacyRemoteApi)](https://www.youtube.com/watch?v=7Z01cRw_i5E).
 
 
-For connectioning to Vrep, 4 files from VREP installation directory and a MATLAB file should be pased altogetherin a new folder.  
+For connectioning to V-rep, 4 files from V-REP installation directory and a MATLAB file should be altogether pased in a new folder.  
 
-<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/vrep_1.PNG" width= "500">
 
-In MATLAB, some codes should be copied and writen. These codes introduce the joints to Vrep. Furthermore, there is a loop that sends the angular configuration to the robot joints in VREP simultaneously because the robot is controlled by joint configuration.  
+In MATLAB, some codes should be copied and writen. These codes introduce the joints to V-rep. Furthermore, there is a loop that sends the angular configuration to the robot joints in V-REP simultaneously because the robot is controlled by joint configuration.  
 
-<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/vrep_2.PNG" width= "700">
 
 In Vrep, the robot should be chosen and replaced its code with ````simRemoteApi.start(19999)```` for connectiong to MATLAB.
 
-<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
+<https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/vrep_3.PNG.jpg" width= "500">
 
 Afterwards, the joints should be on the inverse kinematic mood, and the robot motores should be off.    
-The important thing in VREP is calibration the joints configuration. As the Dinavit diagram, in VREP, is different, so we should calibrate the joint to follow the correct path.   
+The important thing in V-REP is calibrating the joint configurations. As the Dinavit diagram, in VREP, is different, so we should calibrate the joints to follow the correct path.   
 
 
 
@@ -353,6 +347,50 @@ Finally, the robot is ready to move.
 
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/robot%20in%20the%20vrep%20on%20the%20path.jpg" width= "500">
 
+
+# Results
+In the next picture, the error between the desired task and the actual end_effector position and orientation is demostrated in which the error is in order of $10^15$ that is concidered acceptable.
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
+
+Another diagram illustrates the desired thrajectory from the initial position to the final. That, compared with the real trajectory, is accurate.
+$$x_i=\begin{pmatrix} −0.1639\\
+ −0.4963\\
+0.7918\\
+0\\
+0\\
+−2.6118
+\end{pmatrix}              x_f=\begin{pmatrix} −0.4645\\
+−0.2327 \\
+0.3664\\
+0\\
+0\\
+−2.6118
+\end{pmatrix}$$
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/desired%20trajectory.jpg" width= "500">
+
+The last one shows the joint configurations in Radian. that, according to the given final position, the result is precise.
+$$q_i=\begin{pmatrix} \frac{Pi}{2}\\
+0\\
+\frac{Pi}{2}\\
+0\\
+\frac{Pi}{2}\\
+\frac{Pi}{6}
+\end{pmatrix}              q_f=\begin{pmatrix} \frac{Pi}{4}\\
+\frac{-Pi}{4}\\
+\frac{Pi}{1.5}\\
+0\\
+\frac{Pi}{2}\\
+0
+\end{pmatrix}$$
+
+<img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/4the%20joint%20configuration.jpg" width= "500">
+
+By comparing initial and final joint configurations and desired trajectory, a very small difference is absorbed because the error is negligibile. 
+
 # Conclusion
-Controlling robot in this given path needs a strong controller because the singularities and also 
-the robot during the path had limit velocity around 0.1 m/sec .
+Controlling robot in this given path needs a strong controller because of the singularities. Also, the robot, during the path, had a limit velocity around 0.1 m/sec.
+
+
+What is more, robot crashed into the ground because not only the task space has 6 DOF (the 3D space) but also UR10 is a 6 DOF robot. As the result, the robot just could move on every particular path with the individual position and joints configuration. In other words, the UR10 is not able to follow one path with 2 different positions.
