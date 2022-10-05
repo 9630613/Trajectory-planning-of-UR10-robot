@@ -349,11 +349,12 @@ Finally, the robot is ready to move.
 
 
 # Results
-In the next picture, the error between the desired task and the actual end_effector position and orientation is demostrated in which the error is in order of $10^15$ that is concidered acceptable.
+In the next picture, the error between the desired task and the actual end_effector position and orientation is demostrated in which the error is in order of $10^{15}$ that is concidered acceptable.
 
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/error%20%20(order10%5E15).jpg" width= "500">
 
 Another diagram illustrates the desired thrajectory from the initial position to the final. That, compared with the real trajectory, is accurate.
+
 $$x_i=\begin{pmatrix} −0.1639\\
  −0.4963\\
 0.7918\\
@@ -371,6 +372,7 @@ $$x_i=\begin{pmatrix} −0.1639\\
 <img src="https://github.com/9630613/Trajectory-planning-of-UR10-robot/blob/main/Images/desired%20trajectory.jpg" width= "500">
 
 The last one shows the joint configurations in Radian. that, according to the given final position, the result is precise.
+
 $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 0\\
 \frac{Pi}{2}\\
