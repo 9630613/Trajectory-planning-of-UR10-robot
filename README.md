@@ -390,7 +390,9 @@ $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 By comparing initial and final joint configurations and desired trajectory, a very small difference is absorbed because the error is negligibile. 
 
 # Conclusion
-Controlling robot in this given path needs a strong controller because of the singularities. Also, the robot, during the path, had a limit velocity around 0.1 m/sec.
+Controlling robot in this given path needs a strong controller due to the singularities. Also, the robot, during the path, had a limit velocity around 0.1 m/sec.
 
 
-What is more, robot crashed into the ground because not only the task space has 6 DOF (the 3D space) but also UR10 is a 6 DOF robot. As the result, the robot just could move on every particular path with the individual position and joints configuration. In other words, the UR10 is not able to follow one path with 2 different positions.
+What is more, robot crashed into the ground because not only the task space has 6 DOF (the 3D space) but also UR10 is a 6 DOF robot. As the result, the robot just could move on every particular path with the individual position and joints configuration. In other words, the UR10 is not able to follow one path with 2 different positions. to solve this problem we could deploy other 7 DOF robota like FrankaEmikaPanda. In fact, the redundancy in this robot allows robot to move more diverse.
+
+Overall, the robot is controlled properly on the desired path with the least error.
