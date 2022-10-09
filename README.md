@@ -24,7 +24,7 @@ $$q_i=\begin{pmatrix} \frac{Pi}{2}\\
 - [Analytic jacobian](#Analytic-jacobian)                                                                                                                           
 - [Trajectory planning](#Trajectory-planning)                                                                                                                       
 - [Inverse kinematics](#Inverse-kinematics)                                                                                                                         
-- [Controlling robot (IK Algorithm)](#Controlling-robot-(IK-Algorithm))                                                                                             
+- [Controlling the robot](#Controlling-the-robot)                                                                                             
 - [V-REP](#V-REP)       
 - [Results](#Results) 
 - [Conclusion](#Conclusion)
@@ -305,7 +305,7 @@ With integrating from drivative of q, the joint configuration (q) is produced, b
 $$𝐽^* = 𝐽^T(𝐽 𝐽^T + {𝛾^2}I)^{-1}$$
 Now with using a suitable γ , we can control robot in the singularities.
 	            	
-# Controlling robot (IK Algorithm)
+# Controlling the robot
 In order to control the robot on the desired path, an error is calculated between the desired task and the actual end_effector position and orientation. 
 The error is :                 
 
